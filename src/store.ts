@@ -43,7 +43,7 @@ function createSquares() {
           break;
         }
         let square = nextSquares[squareId];
-        square = { ...square, rotation: square.rotation + 1 };
+        nextSquares[squareId] = { ...square, rotation: square.rotation + 1 };
         n += 1;
       }
 
