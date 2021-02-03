@@ -108,7 +108,7 @@
   on:pointermove={panning}
   on:pointerup={stopPan}
 >
-  {#each Object.entries($squares) as [squareId, square]}
+  {#each $squares as square}
     <Square {square} />
   {/each}
   <Origin origin={{ x: 0, y: 0 }} size={100} strokeWidth={2} />

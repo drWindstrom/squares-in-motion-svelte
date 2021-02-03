@@ -3,10 +3,19 @@
 
   export let square: Square;
 
-  // // Default style
+  $: center = { x: square.x, y: -square.y };
+
+  // Default style
   let strokeColor = 'black';
   let strokeWidth = '0';
   let cursorStyle = 'grab';
+
+  let isHighligted = false;
+  // if (square.isHighligted && !square.isSelected) {
+  //   // Highlighted only
+  //   strokeColor = 'rgb(85,160,185)';
+  //   strokeWidth = '2';
+
   // if (square.isHighligted && !square.isSelected) {
   //   // Highlighted only
   //   strokeColor = 'rgb(85,160,185)';
@@ -21,8 +30,6 @@
   //   strokeWidth = '2';
   //   cursorStyle = 'move';
   // }
-
-  $: center = { x: square.x, y: -square.y };
 
   // export class SquareHandlers {
   // constructor(canvas: SquareCanvas) {
@@ -127,4 +134,6 @@
   stroke-width={strokeWidth}
   cursor={cursorStyle}
   transform={`translate(${center.x} ${center.y}) rotate(${square.rotation})`}
+  on:pointerenter
+  on:pointerleave
 />
