@@ -1,56 +1,16 @@
 <script lang="ts">
   import { squares } from './store';
 
-  function getInputValue(e: Event) {
-    const inputElement = e.target as HTMLInputElement;
-    return Number(inputElement.value);
-  }
-
   let sideLength = 40;
   let numberOfSquares = 100;
-  let requestedFps = 30;
-  let intervalId: number | undefined;
   let numberSpinning = 0;
-  let fpsList: number[] = [];
+  let requestedFps = 30;
   let lastFrameFps = 0;
 
-  function handleStartButtonClick() {
-    fpsList = [];
-    lastFrameFps = 0;
-    // Create squares
-    squares.create(numberOfSquares, sideLength);
-    // Stop spinning squares
-    stopSpinningSquares();
-    logInput();
-    if (numberSpinning > 0) {
-      intervalId = setInterval(() => {
-        measureFps();
-        squares.rotate(numberSpinning);
-      }, 1000 / requestedFps);
-    }
-  }
+  let intervalId: number | undefined;
+  let fpsList: number[] = [];
 
-  function handleStopButtonClick() {
-    stopSpinningSquares();
-  }
-
-  function average(list: number[], subsetSize = 0) {
-    if (list.length === 0 || list.length < subsetSize) {
-      return 0;
-    }
-
-    const summer = (acc: number, current: number) => acc + current;
-    if (subsetSize === 0) {
-      const sum = list.reduce(summer);
-      return Math.round(sum / list.length);
-    } else {
-      const lastItems = list.slice(list.length - subsetSize);
-      const sum = lastItems.reduce(summer);
-      return Math.round(sum / lastItems.length);
-    }
-  }
-
-  function stopSpinningSquares() {
+  function stopSpinning() {
     if (intervalId !== undefined) {
       clearInterval(intervalId);
       intervalId = undefined;
@@ -73,14 +33,44 @@
     lastT = t;
   }
 
-  function logInput() {
-    console.log(`
-    Starting a new run with the following parameters:  
-      sideLength: ${sideLength}
-      numberOfSquares: ${numberOfSquares} 
-      numberSpinning: ${numberSpinning}
-      requestedFps: ${requestedFps}
-    `);
+  function handleStartButtonClick() {
+    fpsList = [];
+    lastFrameFps = 0;
+    // Create squares
+    squares.create(numberOfSquares, sideLength);
+    // Stop spinning squares
+    stopSpinning();
+    if (numberSpinning > 0) {
+      intervalId = setInterval(() => {
+        measureFps();
+        squares.rotate(numberSpinning);
+      }, 1000 / requestedFps);
+    }
+  }
+
+  function handleStopButtonClick() {
+    stopSpinning();
+  }
+
+  function average(list: number[], subsetSize = 0) {
+    if (list.length === 0 || list.length < subsetSize) {
+      return 0;
+    }
+
+    const summer = (acc: number, current: number) => acc + current;
+    if (subsetSize === 0) {
+      const sum = list.reduce(summer);
+      return Math.round(sum / list.length);
+    } else {
+      const lastItems = list.slice(list.length - subsetSize);
+      const sum = lastItems.reduce(summer);
+      return Math.round(sum / lastItems.length);
+    }
+  }
+
+  function getInputValue(e: Event) {
+    const inputElement = e.target as HTMLInputElement;
+    return Number(inputElement.value);
   }
 </script>
 

@@ -21,31 +21,33 @@
   $: invOrigin = { x: origin.x, y: -origin.y };
 </script>
 
-<marker
-  id="arrow"
-  viewBox="0 0 10 10"
-  refX="5"
-  refY="5"
-  markerWidth={markerSize}
-  markerHeight={markerSize}
-  orient="auto-start-reverse"
->
-  <path d="M 0 0 L 10 5 L 0 10 z" />
-</marker>
+<g>
+  <marker
+    id="arrow"
+    viewBox="0 0 10 10"
+    refX="5"
+    refY="5"
+    markerWidth={markerSize}
+    markerHeight={markerSize}
+    orient="auto-start-reverse"
+  >
+    <path d="M 0 0 L 10 5 L 0 10 z" />
+  </marker>
 
-<path
-  d={`M ${yArrow.x} ${yArrow.y} 
+  <path
+    d={`M ${yArrow.x} ${yArrow.y} 
       L ${invOrigin.x} ${invOrigin.y} 
       L ${xArrow.x} ${xArrow.y}`}
-  stroke="black"
-  stroke-width={strokeWidth}
-  fill="none"
-  marker-start="url(#arrow)"
-  marker-end="url(#arrow)"
-/>
+    stroke="black"
+    stroke-width={strokeWidth}
+    fill="none"
+    marker-start="url(#arrow)"
+    marker-end="url(#arrow)"
+  />
 
-<text x={xLabel.x} y={xLabel.y}>X</text>
-<text x={yLabel.x} y={yLabel.y}>Y</text>
+  <text x={xLabel.x} y={xLabel.y}>X</text>
+  <text x={yLabel.x} y={yLabel.y}>Y</text>
+</g>
 
 <style>
   text {
