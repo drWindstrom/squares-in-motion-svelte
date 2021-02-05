@@ -6,14 +6,14 @@
 
   let viewportWidth = 0;
   let viewportHeight = 0;
-  let svg: SVGSVGElement;
+  let svgRef: SVGSVGElement;
   let viewBoxMinX = 0;
   let viewBoxMinY = 0;
   const ORIGIN_OFFSET = 32;
 
   function setViewportSize() {
-    viewportWidth = svg.clientWidth;
-    viewportHeight = svg.clientHeight;
+    viewportWidth = svgRef.clientWidth;
+    viewportHeight = svgRef.clientHeight;
   }
 
   onMount(() => {
@@ -36,7 +36,7 @@
     }
     const newZoom = zoom * zoomFactor;
     // Determine pointer location relative to svg element
-    const svgBBox = svg.getBoundingClientRect();
+    const svgBBox = svgRef.getBoundingClientRect();
     const offsetX = e.clientX - svgBBox.left;
     const offsetY = e.clientY - svgBBox.top;
     // Convert pointer location into SVG viewport coordinates
@@ -92,6 +92,19 @@
     dragElement.releasePointerCapture(e.pointerId);
     isPan = false;
   }
+
+  function deselectAll(e: PointerEvent) {
+    // Handle onPointerdown
+    const MAIN_BUTTON = 0;
+    if (e.button === MAIN_BUTTON) {
+      squares.deselectAll();
+    }
+  }
+
+  function handlePointerDown(e: PointerEvent) {
+    startPan(e);
+    deselectAll(e);
+  }
 </script>
 
 <svelte:window on:resize={setViewportSize} />
@@ -102,14 +115,15 @@
   height="100%"
   viewBox={`${viewBoxMinX} ${viewBoxMinY} ${viewboxWidth} ${viewboxHeight}`}
   xmlns="http://www.w3.org/2000/svg"
-  bind:this={svg}
+  bind:this={svgRef}
   on:wheel={handleZoom}
-  on:pointerdown={startPan}
+  on:pointerdown={handlePointerDown}
   on:pointermove={panning}
   on:pointerup={stopPan}
 >
-  {#each $squares as square}
-    <Square {square} />
-  {/each}
   <Origin origin={{ x: 0, y: 0 }} size={100} strokeWidth={2} />
+
+  {#each $squares as square}
+    <Square {square} {svgRef} />
+  {/each}
 </svg>

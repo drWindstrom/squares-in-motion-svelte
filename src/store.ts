@@ -45,10 +45,48 @@ function createSquares() {
     );
   }
 
+  function select(squareId: string) {
+    update(squares =>
+      squares.map(square => {
+        if (square.id === squareId) {
+          square = { ...square, isSelected: !square.isSelected };
+        }
+        return square;
+      })
+    );
+  }
+
+  function deselectAll() {
+    update(squares =>
+      squares.map(square => {
+        square = { ...square, isSelected: false };
+        return square;
+      })
+    );
+  }
+
+  function translate(deltaX: number, deltaY: number) {
+    update(squares =>
+      squares.map(square => {
+        if (square.isSelected === true) {
+          square = {
+            ...square,
+            x: square.x + deltaX,
+            y: square.y - deltaY,
+          };
+        }
+        return square;
+      })
+    );
+  }
+
   return {
     subscribe,
     create,
     rotate,
+    select,
+    deselectAll,
+    translate,
     reset: () => set([]),
   };
 }
